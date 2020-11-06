@@ -1,0 +1,53 @@
+# commandes effectuées dans le terminal
+
+winpty docker exec -it mongo-cli sh
+mongo --host mongo-server
+show dbs
+
+use sample
+show collections
+db.grades.help()
+db.grades.find()
+db.grades.find({student_id: 3})
+db.grades.find({student_id: {$lt: 3}}).count()
+
+use city
+show collections
+db.inspections.find({result: {$in: ["Pass", "Fail"]}}).count()
+
+use digg
+show collections
+db.stories.find({"shorturl.view_count": {$gt: 1000}}).count()
+
+db.stories.find({"media": "news"}).sort({comments: -1}).limit(5)
+
+db.stories.find({$or: [
+    {"topic.name": "Television"},
+    {"media": "video"}
+]}).skip(5).limit(10)
+
+db.stories.find({"topic.name": "Comedy", "media": {$in: ["news", "images"]}})
+
+use city
+db.inspections.find().limit(1).pretty()
+db.inspections.find({result: "Completed"}).count()
+
+db.inspections.updateMany(
+    {result: "Completed"},
+    {
+        $set: {result: "No Violation Issued"}
+    }
+)
+db.inspections.updateMany(
+    {result: "Fail"},
+    {
+        $set: {fine: 100}
+    }
+)
+db.inspections.updateMany(
+    {result: "Fail", "address.city": "ROSEDALE"},
+    {
+        $inc: {fine: 150}
+    }
+)
+
